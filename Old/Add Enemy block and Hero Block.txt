@@ -1,0 +1,191 @@
+import time
+import random
+
+#Enemy Sprites
+enemy_normal = ["||_||","('_')"," -|- ","_||_ "]
+enemy_attack = ["||_||","('O')"," -|- ","_||_ "]
+enemy_dead = ["||_||","(X-X)"," -|- ","_||_ "]
+enemy_clear = ["     ","     ","     ","     "]
+enemy_status = []
+enemy_status = enemy_normal
+#Hero Sprites
+hero_normal = ["  _      ","_|^|_    ","(*_*) O  ",",-|-,|   ","_||_|    "]
+hero_attack = ["  _      ","_|^|_ * $","(*_*) 0* ",",-|-,|   ","_||_|    "]
+hero_dead = ["  _      ","_|^|_    ","(X_X)    ",",-|-,    ","_||_ ___o"]
+hero_clear = ["         ","         ","         ","         ","         "]
+hero_status = []
+hero_status = hero_normal
+#Attack Sprites
+fire_ball = ["  ,oO"," ,oO ",",oO  "]
+pyro_blast = ["oO8  "," oO8 ","oO8 "]
+miss_sprite = ["?    ","  ?  "," ?   "]
+cut_sprite = ["   ||","  || "," ||  "]
+assinate = ["  III"," III ","III  "]
+attack_clear = ["     ","     ","     "] 
+attack_status = attack_clear
+
+#Top of screen values
+level = 1
+lives = 3
+
+#Basic health settings
+enemy_health = 10
+hero_health = 10
+enemy_max = 10
+hero_max = 10
+
+#Basic damage settings
+amplify_1 = 0
+amplify_2 = 0
+
+#Basic attack visual
+attack_num = ""
+
+#Basic screen state
+text_original_1 = "  1 - Attack"+" "*21+"2 - Heavy Attack"
+text_1 = text_original_1
+text_original_2 = "  3 - Block"+" "*22+"4 - Counter"
+text_2 = text_original_2
+status = "original"
+
+#Used in full screen sprite 
+space=" "*3
+line="-"+"=-"*25
+
+#Prints sprite tab
+def sprite_show():
+    sprite=[line, "  LVL:  "+str(level)+" "*29+"LIVES:  "+str(lives), line," "*42+enemy_status[0]," "*42+enemy_status[1],"  HP: "+str(hero_health)+" "*(16-int(len(str(hero_health))))+attack_status[0]+" "*15+enemy_status[2],space+hero_status[0]+" "*10+attack_status[1]+" "*15+enemy_status[3],space+hero_status[1]+" "*10+attack_status[2],space+hero_status[2]+" "*25+"  HP: "+str(enemy_health),space+hero_status[3]+" "*6+str(attack_num),space+hero_status[4],line,text_1,text_2,line]
+    print("\n"*30)
+    for i in range (0,len(sprite)):
+        print(str(sprite[i]))
+    
+while True:
+  #Change occurs when enemy dead/lvl over
+  if enemy_health <= 0:
+    #Edit Level and Health
+    level += 1 
+    enemy_max += random.randint(1,3)
+    enemy_health = enemy_max
+    hero_max += random.randint(1,3)
+    hero_health = hero_max 
+  
+    #Edit Damage  
+    amplify_1 += random.randint(1,2)
+    amplify_2 += random.randint(1,2)
+    if amplify_1 >= amplify_2 + 2:
+        amplify_1 -= 1 
+  
+  #Chosen from Option Original Screen
+  if status == "original":
+    #Full screen sprites
+    sprite_show()     
+    option = input() + " "
+    if option[0] == "1" or option[0] == "2" or option[0] == "3" or option[0] == "4":
+        enemy_choice = int(random.randint(1,7))
+        #Odds 1 - 3 enemy attack
+        if option[0] == "1" or option[0] == "2":
+            
+            if enemy_choice == 1 or enemy_choice == 2 or enemy_choice == 3 or enemy_choice == 4:
+                #You attack, they attack/heavy attack
+                if option[0] == "1":
+                    #Normal Attack
+                    damage = random.randint(3 + amplify_1, 5 + amplify_2)
+                    text_1 = "  ! - You Blast The Enemy For " + str(damage) + " Damage - !"
+                    attack_status = fire_ball
+                    hero_status = hero_attack
+                    enemy_status = enemy_dead
+                else:
+                    miss = random.randint(0,1)
+                    if miss == 1:
+                      #Miss massive attack
+                      damage = 0
+                      text_1 = "  ! - You Miss Your Pyro-Blast And Deal No Damage - !"
+                      attack_status = miss_sprite
+                      hero_status = hero_dead
+                    else:
+                      #Hit massive attack
+                      damage = random.randint(5 + amplify_1, 7 + amplify_2)
+                      text_1 = "  ! - You Pyro-Blast The Enemy For " + str(damage) + " Damage - !"
+                      attack_status = pyro_blast
+                      hero_status = hero_attack
+                      enemy_status = enemy_dead
+                attack_num = " ?! -" + str(damage) + " ?!"  
+                enemy_health -= damage
+                text_2 = " "*10 + "! - ENTER To Continue - !"
+                sprite_show()                
+                input()
+                
+                if enemy_health > 0:
+                  #resets hero sprites
+                  hero_status = hero_normal
+                  enemy_status = enemy_normal
+
+                  #Enemies turn to attack/heavy attack
+                  if enemy_choice == 1 or enemy_choice == 2 or enemy_choice == 3:
+                      #Normal Enemy Attack
+                      damage = random.randint(3 + amplify_1, 5 + amplify_2)
+                      text_1 = "  ! - The Enemy Cuts You For " + str(damage) + " Damage - !"
+                      attack_status = cut_sprite
+                      enemy_status = enemy_attack
+                      hero_status = hero_dead
+                  else:
+                      miss = random.randint(0,1)
+                      if miss == 1:
+                        #Miss enemy massive attack
+                        damage = 0
+                        text_1 = "  ! - The Enemy Misses There Assinate - !"
+                        attack_status = miss_sprite
+                        enemy_satus = enemy_dead
+                      else:
+                        #Hit enemy massive attack
+                        damage = random.randint(5 + amplify_1, 7 + amplify_2)
+                        text_1 = "  ! - The Enemy Assinates You For " + str(damage) + " Damage - !"
+                        attack_status = assinate
+                        enemy_status = enemy_attack
+                        hero_status = hero_dead
+                  attack_num = " ?! -" + str(damage) + " ?!"  
+                  hero_health -= damage
+                  text_2 = " "*10 + "! - ENTER To Continue - !"
+                  sprite_show() 
+                  input()
+                
+                #resets all sprites changes
+                text_1 = text_original_1
+                text_2 = text_original_2
+                hero_status = hero_normal
+                enemy_status = enemy_normal
+                attack_status = attack_clear
+                attack_num = ""
+                
+            #elif enemy_choice == 5:
+                #You attack, they block
+                #block_chance
+                  
+                
+        #else:
+            #if enemy_choice in [1, 2, 3]:
+                #You block, they attack   
+                
+            #elif enemy_choice in [4, 5]:
+                #You block, they block
+                
+            #elif enemy_choice == 6:
+                #You block, they heavy attack
+                
+            #else:
+                #You block, they dodge
+                
+        #resets all sprites changes
+        text_1 = text_original_1
+        text_2 = text_original_2
+        hero_status = hero_normal
+        enemy_status = enemy_normal
+        attack_status = attack_clear
+        attack_num = ""
+  
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,443 @@
+import random
+import time
+
+#Sprite Extra's
+space = " " * 3
+line = "-"+"=-" * 25
+#Enemy Sprites
+enemy_normal_n = ["         ",
+                  "  ||_||  ",
+                  "  ('_')  ",
+                  "  !-|-   ",
+                  "  _||_   "]
+enemy_normal_b = ["O   M_M  ",
+                  "|  ('_') ",
+                  " |]=|O|=,",
+                  " |  V|V  ",
+                  " |_|| ||_"]
+enemy_normal = enemy_normal_n
+enemy_attack_n = ["         ",
+                  "  ||_||  ",
+                  "  (^O^)  ",
+                  "  !-|-   ",
+                  "  _||_   "]
+enemy_attack_b = ["0   M_M  ",
+                  "|* (YoY) ",
+                  "*|]=|O|=,",
+                  " |  V|V  ",
+                  " |_|| ||_"]
+enemy_attack = enemy_attack_n
+enemy_dead_n =   ["         ",
+                  "  ||_||  ",
+                  "  (X-X)  ",
+                  "   -|-   ",
+                  "  _||_   "]
+enemy_dead_b =   ["O   M_M  ",
+                  "|  (X-X) ",
+                  " |]=|O|=,",
+                  " |  V|V  ",
+                  " |_|| ||_"]
+enemy_dead = enemy_dead_n
+enemy_clear = ["     ","     ","     ","     "]
+enemy_status = enemy_normal
+#Boss Name List
+enemy_name_list = ["Steve", "Dweeb Muffin", "Regigigas", "Travis Scott", "Tittenick", "Kidifidora", "Mrs. Koyanagi", "Geraldinestiegn", "Wallee", "Eeevvaaa", "The Wise Uncle", "The Enchanted Dragon Of Wisdom", "Dixie Normus", "Ryan Rim-licker", "Selina the Serperior", "Ibby-Vinon", "Gym Leader Elesa", "An Iceburg..."]
+
+#Hero Sprites
+hero_normal = ["  _      ",
+               "_|^|_    ",
+               "(*_*) O  ",
+               ",-|-,|   ",
+               "_||_|    "]
+hero_attack = ["  _      ",
+               "_|^|_ * $",
+               "(*_*) 0* ",
+               ",-|-,|   ",
+               "_||_|    "]
+hero_dead =   ["  _      ",
+               "_|^|_    ",
+               "(X_X)    ",
+               ",-|-,    ",
+               "_||_ ___o"]
+hero_clear = ["         ","         ","         ","         ","         "]
+hero_status = hero_normal
+#Attack Sprites
+fire_ball = ["  ,oO"," ,oO ",",oO  "]
+pyro_blast = ["oO8  "," oO8 ","oO8 "]
+miss_sprite = ["?    ","  ?  "," ?   "]
+cut_sprite = ["   ||","  || "," ||  "]
+assinate = ["  III"," III ","III  "]
+heal_sprite = [" +   ","   + ","  +  "]
+sneaky_sprite = [" ??? ","?  ??","  ?  "]
+attack_clear = ["     ","     ","     "] 
+attack_status = attack_clear
+#Item Inventory Sprites
+
+#Item Use Sprites
+
+#RPJ opening Sprite
+opening_text = ["          ||||||      ||||||     ||||||||||        ", 
+                " |       |||  ||     |||  ||         |||       |   ", 
+                "|||     |||  ||     |||  ||         |||       |||  ", 
+                " |     ||||||      ||||||          |||         |   ", 
+                "      |||  ||     |||       |||  |||               ", 
+                "     |||   |||   |||         ||||||                "]
+opening_line = " !? - PRESS ENTER + PRESS ENTER + PRESS ENTER - ?! "
+#Rip sprite
+end_sprite = [line, " " * 12 + " ! - ENTER To Restart - !", line, "",
+             "            ||||||         |||        |||||        ", 
+             "   |       |||  ||        |||        |||  ||   |   ", 
+             "  |||     |||  ||                   |||  ||   |||  ", 
+             "   |     ||||||         |||        ||||||      |   ", 
+             "        |||  ||        |||        |||              ", 
+             "       |||   |||      |||        |||               ",
+             "", line, " " * 12 + " ! - ENTER To Restart - !", line]
+#Top of screen values
+level = 1
+lives = 1
+
+#Basic health settings
+enemy_max = 5
+hero_max = 10
+enemy_health = enemy_max
+hero_health = hero_max
+
+#Basic damage settings
+amplify_1 = 0
+amplify_2 = 0
+
+#Boss Amplifier
+boss_buff = 0
+
+#Basic attack visual
+attack_num = ""
+
+#Basic Inventory 
+inventory_list = ["", "", ""]
+item_efc = ["", "", ""]
+
+#Item names
+item_names = ["Shield", ""]
+item_description = [""]
+
+#Basic screen state
+text_original_1 = "  1 - Attack" + " " * 21 + "2 - Heavy Attack"
+text_1 = text_original_1
+text_original_2 = "  3 - Heal" + " " * 23 + "4 - Inventory"
+text_2 = text_original_2
+status = "original"
+
+#Prints battle sprites
+def sprite_show():
+    sprite = [line, "  LVL:  "+str(level)+" "*29+"LIVES:  "+str(lives), line, " " * 40 + enemy_status[0], " " * 40 + enemy_status[1],"   HP: "+str(hero_health)+" "*(15-int(len(str(hero_health))))+attack_status[0]+" "*13+enemy_status[2],space+hero_status[0]+" "*10+attack_status[1]+" "*13+enemy_status[3],space+hero_status[1]+" "*10+attack_status[2]+" "*13+enemy_status[4],space+hero_status[2],space+hero_status[3]+" "*6+str(attack_num)+" "*(21-int(len(attack_num)))+"  HP: "+str(enemy_health),space+hero_status[4],line, str(text_1), str(text_2), line]
+    print("\n" * 30)
+    for i in range (0,len(sprite)):
+        print(str(sprite[i]))
+        
+#Game Start Up Image
+for x in range (0,51):
+    print("\n" * 50 + line + "\n" + opening_line + "\n" + line + "\n")
+    for i in range (0,6):
+        print(opening_text[i]) 
+        bot_value = opening_text[i][0]        
+        opening_text[i] = opening_text[i].replace(bot_value, "", 1) + bot_value
+    print("\n" + line + "\n" + opening_line + "\n" + line + "\n" * 3)
+    time.sleep(0.025)
+input()        
+
+#Creates Game Ending Secret Message and splits into 3 parts
+secret_list = ["Hig", "Tra", "Jit", "Hip", "Ind", "Gro", "Yin", "Che", "Que", "Yim", "Jon", "Fid", "Cri", "Nor", "Ifi"]
+secret_msg = random.choice(secret_list) + random.choice(secret_list) 
+
+#Loop game
+while True:
+  #Level up
+  if enemy_health <= 0:
+    #Edit Level and Health
+    level += 1
+    if level % 5 == 0:
+        #Boss level sprites
+        boss_buff = random.randint(int(level / 5),int(level / 5) * 2 - 1)
+        enemy_normal = enemy_normal_b 
+        enemy_attack = enemy_attack_b
+        enemy_dead = enemy_dead_b
+        enemy_status = enemy_normal
+        enemy_name = "Somebody..."
+    else:
+        #Lowers max health after boss level
+        if level % 5 == 4:
+            enemy_max -= boss_buff        
+        #Normal enemy sprites and name
+        boss_buff = 0
+        enemy_normal = enemy_normal_n
+        enemy_attack = enemy_attack_n
+        enemy_dead = enemy_dead_n
+        enemy_status = enemy_normal
+        enemy_name = random.choice(enemy_name_list)
+        
+    #Enemy Buffs
+    enemy_max += random.randint(3,5) + boss_buff
+    enemy_health = enemy_max
+    #Hero Buffs
+    hero_orig = hero_max #Might not be needed, please look into
+    hero_max += random.randint(3,6)
+    hero_health = hero_max 
+    
+    #Edit Damage
+    damage_1 = random.randint(0,2)
+    damage_2 = random.randint(1,3) 
+    if amplify_1 + damage_1 >= amplify_2 + 2 + damage_2:
+        damage_1 -= 1 
+    amplify_1 += damage_1
+    amplify_2 += damage_2
+    
+    #Play Lvl Up sprite
+    lvl_sprite = [line, "  LVL:  " + str(level) + " " * 29 + "LIVES:  " + str(lives), line, "",
+                 "           ||   ||   || ||     || || ||[]          ",
+                 "    []     ||    || ||  ||     || || ||[]    []    ",
+                 "           ||||   |||   |||     |||  ||            ",
+                 "",
+                 "             HP +" + str(hero_max - hero_orig) + " " * 10 + "DMG +" + str(damage_1) + "-" + str(damage_2 + damage_1) + "     ", "", line, "      !  - Congratulations Hero Ya Did It - !", " " * 10 + " ! - ENTER To Continue - !", line]
+    print("\n" * 30)
+    for i in range (0,len(lvl_sprite)):
+      print(str(lvl_sprite[i]))
+    input("\n" * 3)
+    
+    #Reward/Clue for beating boss last level
+    if (level - 1) % 5 == 0 and random.randint(1,1) == 1:
+      #Chooses Clue to give
+      if random.randint(1,2) == 1:
+        clue = secret_msg[0:3]
+        hint = "1"
+      else:
+        clue = secret_msg[3:6]
+        hint = "2"
+      #Play Clue Sprite
+      clue_sprite = [line, "  LVL:  " + str(level) + " " * 29 + "LIVES:  " + str(lives), line,
+                    "  ?     Oo        |||||||||||        oO    ?      ?",
+                    "     ?   Oo     |||         |||     oO   ?    ?",
+                    " ?      ?  Oo||||     -=-     ||||oO   ?         ?",
+                    "    ?      |||      ( " + clue + " )      |||      ?   ?",
+                    "       ?     ||||     -=-     ||||    ?      ?    ? ",
+                    "   " + hint + "        ?   |||         |||    ?     ?",
+                    " ?       ?        |||||||||||   ?      ?        ?",
+                    line, " " * 6 + "! - They Dropped There Amulet... - !", " " * 10 + " ! - ENTER To Continue - !", line]
+      
+      print("\n" * 30)
+      for i in range (0,len(clue_sprite)):
+            print(str(clue_sprite[i]))
+      input("\n" * 3) 
+      
+    #Play Enemy Intro sprite
+    intro_sprite = [line, "  LVL:  " + str(level) + " " * 29 + "LIVES:  " + str(lives), line, 
+                          "                    .|||||||.",
+                          "        _==_      .||   "    +       "    ||.      _==_        ",
+                          "   $   ||  ||   $ ||" + enemy_status[0] + "|| $   ||  ||   $   ",
+                          "   I  ||    ||  I ||" + enemy_status[1] + "|| I  ||    ||  I   ",
+                          "      ||    ||    ||" + enemy_status[2] + "||    ||    ||      ",
+                          "      *||||||*    ||" + enemy_status[3] + "||    *||||||*      ",
+                          "..................||" + enemy_status[4] + "||..................",
+                          line,  " " * 5 + "! - " + enemy_name + " is Approuching - !", " " * 10 + " ! - ENTER To Continue - !", line]
+    print("\n" * 30)
+    for i in range (0,len(intro_sprite)):
+        print(str(intro_sprite[i]))
+    input("\n" * 3)
+        
+  #To End Game
+  if hero_health <= 0:
+    lives -= 1
+    if lives == 0:
+      #Play Game Ending Sprite
+      print("\n" * 30)
+      for i in range (0,len(end_sprite)):
+          print(str(end_sprite[i]))
+      input("\n" * 3)
+
+      #Resets Game Values
+      level = 1
+      lives = 1
+      enemy_max = 10
+      enemy_health = enemy_max
+      hero_max = 10
+      hero_health = hero_max
+      amplify_1 = 0
+      amplify_2 = 0
+      boss_buff = 0    
+      enemy_normal = enemy_normal_n
+      enemy_attack = enemy_attack_n
+      enemy_dead = enemy_dead_n
+      enemy_status = enemy_normal
+      secret_msg = random.choice(secret_list) + random.choice(secret_list) 
+    else:
+      #####################################################################################################################Add Animation
+      enemy_health = enemy_max
+      hero_health = hero_max
+  #Game then begins  
+  #Chosen from Option Original Screen
+  if status == "original":
+    #Full screen sprites
+    sprite_show()     
+    option = input("\n" * 3) + " "
+    if option[0] == "1" or option[0] == "2" or option[0] == "3":
+        enemy_choice = int(random.randint(1,4))
+        
+        if option[0] == "1":
+            miss = random.randint(1,10)
+            if miss == 1:
+                #Miss normal attack
+                damage = 0
+                text_1 = " You Missed"
+                attack_status = miss_sprite
+                hero_status = hero_dead
+            else:
+                #Normal Attack
+                damage = random.randint(2 + amplify_1, 5 + amplify_2)
+                text_1 = " You Cast A Magical Spooky Wave , For " + str(damage) + " Damage"
+                attack_status = fire_ball
+                hero_status = hero_attack
+                enemy_status = enemy_dead   
+                
+        elif option[0] == "3":
+            #Heal Hero
+            heal = random.randint(3 + amplify_1, 7 + amplify_2)
+            if hero_health + heal > hero_max:
+                damage = hero_max - hero_health
+            else:
+                damage = heal
+            text_1 = " You Take A Smoke Break For " + str(damage) + " Health"
+            attack_status = heal_sprite
+            hero_status = hero_attack
+            damage = damage * -1             
+            
+        else:
+            miss = random.randint(0,1)
+            if miss == 1:
+                #Miss massive attack
+                damage = 0
+                text_1 = " You Missed"
+                attack_status = miss_sprite
+                hero_status = hero_dead
+            else:
+                #Hit massive attack
+                damage = random.randint(5 + amplify_1, 7 + amplify_2)
+                text_1 = "  You BLAAASST Them For " + str(damage) + " Damage"
+                attack_status = pyro_blast
+                hero_status = hero_attack
+                enemy_status = enemy_dead
+                      
+        #Remaining changes and then sprite print for Heroes turn
+        attack_num = " ?! " + str(damage * -1) + " ?!"  
+        if damage > 0:
+            enemy_health -= damage
+        else:
+            hero_health -= damage
+        health = False
+        #Easter Eggs For ENTER To Continue  
+        if random.randint(1,6) == 1:
+            text_2 = " Don't Leave Me..."
+        else:
+            text_2 = " Press ENTER To Continue"
+        sprite_show()                
+        input("\n" * 3)
+        fail = False
+               
+        #Only attacks if still above 0 HP
+        if enemy_health > 0:
+            #Resets hero sprites
+            hero_status = hero_normal
+            enemy_status = enemy_normal
+
+            #Enemies turn to attack/heavy attack/heal/counter
+            if enemy_choice == 1:
+                #Normal Enemy Attack
+                damage = random.randint(1 + amplify_1 + boss_buff, 4 + amplify_2 + boss_buff)
+                text_1 = " They Slice Ur Side Burns For " + str(damage) + " Damage"
+                attack_status = cut_sprite
+                enemy_status = enemy_attack
+                hero_status = hero_dead
+                
+            elif enemy_choice == 2:
+                #Enemy Heals
+                heal = random.randint(2 + amplify_1 + boss_buff, 6 + amplify_2 + boss_buff) 
+                if enemy_health + heal > enemy_max:
+                      damage = enemy_max - enemy_health
+                else:
+                      damage = heal
+                text_1 = " The Enemy Stares At Your... Angrily... "
+                attack_status = heal_sprite
+                enemy_status = enemy_attack
+                damage = damage * -1
+                
+            elif enemy_choice == 3:
+                #Enemy uses counter attack
+                if damage > 0:
+                    #Counter attack occurs
+                    damage = int((damage + (damage % 2)) / 2 + random.randint(1 + amplify_1 + boss_buff, 2 + amplify_2 + boss_buff))
+                    text_1 = "  The Enemy Did This Cool Thing With His Hands, For " + str(damage) + " Damage"
+                    attack_status = sneaky_sprite
+                    enemy_status = enemy_attack
+                    hero_status = hero_dead
+                else: 
+                    #Counter attack fails
+                    damage = random.randint(1 + amplify_1 + boss_buff, 2 + amplify_2 + boss_buff) * -1
+                    text_1 = " The Enemy May, or May Not, Have Hurt Himself... For " + str(damage * -1) + " Damage"
+                    attack_status = miss_sprite 
+                    fail = True
+                    
+            else:
+                miss = random.randint(0,1)
+                if miss == 1:
+                    #Miss enemy massive attack
+                    damage = 0
+                    text_1 = "  The Enemy Chooses Paper"
+                    attack_status = miss_sprite
+                    enemy_satus = enemy_dead
+                else:
+                    #Hit enemy massive attack
+                    damage = random.randint(4 + amplify_1 + boss_buff, 6 + amplify_2 + boss_buff)
+                    text_1 = "  The Enemy Used The Sharp Side Of The Knife For " + str(damage) + " Damage"
+                    attack_status = assinate
+                    enemy_status = enemy_attack
+                    hero_status = hero_dead
+                    fail = True
+                    
+            attack_num = " ?! " + str(damage * -1) + " ?!"
+            if damage > 0:
+                hero_health -= damage
+            elif fail == True:
+                enemy_health += damage
+                fail = False
+            else:
+                enemy_health -= damage
+            sprite_show() 
+            input("\n" * 3)
+                                                          
+        #Resets all sprites changes
+        text_1 = text_original_1
+        text_2 = text_original_2
+        hero_status = hero_normal
+        enemy_status = enemy_normal
+        attack_status = attack_clear
+        attack_num = ""
+    
+    #Inventory Option
+    elif option[0] == "4":
+        status = "bag"
+        
+  #Inventory Option Screen     
+  elif status == "bag":   
+    inventory_sprite = [line, "  LVL:  " + str(level) + " " * 29 + "LIVES:  " + str(lives), line,
+                     "      " +                     "                                 ._=[o]=_.   ",
+                     "   1. " + inventory_name[0] + "                                 |       |   ",
+                     "      " +                     "                                .I       I.  ",
+                     "   2. " + inventory_name[1] + "                                 8       8   ",
+                     "      " +                     "                                'I       I'  ",
+                     "   3. " + inventory_name[2] + "                                 |       |   ",
+                     "      " +                     "                                 =|||||||=   ",
+                     line, "BETA - Ignore this", "", line]                                                                                                        
+                                                                                                 #"
+    print("\n" * 30)
+    for i in range (0,len(inventory_sprite)):
+        print(str(inventory_sprite[i]))
+    input("\n" * 3)    
+    status = "original" 

@@ -1,0 +1,51 @@
+import time
+
+input()
+
+#Extra's
+line = "-" + "=-" * 25
+level = 0
+lives = 1
+
+#Walking Sprite
+walking = [[" O * ",
+            " M-| ",
+            "ll.|."],
+           [" O * ",
+            " M-| ",
+            "ll..|"],
+           [" O * ",
+            " M-| ",
+            "l.l.|"],
+           [" O * ",
+            " M-| ",
+            ".ll.|"],
+           ["  O *",
+            "  M-|",
+            ".ll.|"],
+           ["  o *",
+            "  M-|",
+            ".ll.|"]
+          ]
+
+#Animation Sprite
+for x in range (0,9):
+  for i in range (0,6):
+    #Change walking sprite in Walk Line
+    walk_line = [" " * x + walking[i][0] + " " * (8 - x),
+                 " " * x + walking[i][1] + " " * (8 - x),
+                 "." * x + walking[i][2] + "." * (8 - x)]  
+    
+    #Hole Picture
+    print("\n" * 33 + line + "\n  LVL:  " + str(level) + " " * 29 + "LIVES:  " + str(lives) + "\n" + line + "\n" +
+                   "                                  ||      []  || \n" +
+                   "                         MMMM     || []       || \n" +
+                   "      MMM             MMMMMMMM    ||          || \n" +
+                   "   MMMMMMM             MMMMM      ||   []     || \n" +
+                   "  ==MMMMM" + walk_line[0] +    "==[]       |||||        || \n" +
+                   "  ^  []==" + walk_line[1] +    "^  []==    |  ||    []  || \n" +
+                   "....[]..." + walk_line[2] +    "...[]......|  ||        ||.\n" +
+                   line + "\n" + " " * 9 + "! - The Tower of Mystery... - !" + "\n" + " ! - A Tower Filled with Nothin But Mysteries - !" + "\n" + line + "\n" * 3
+                  )
+    
+    time.sleep(0.2)   
