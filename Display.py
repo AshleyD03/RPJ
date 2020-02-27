@@ -11,14 +11,33 @@ def screen(display, topText, botText, style):
             for x in range (36):
                 print((display[y][x]), end="")
             print("@@")
+
     else: # Battle Styling, just prints each line
         for y in range (8):
             print(display[y])
+            
     # Bottom 
     print(line)
     for i in range (2):
         print("@  " + botText[i] + " " * (48 - len(botText[i])) + "@")
     print(line)
+
+# Fix Me 
+def battleFormat():
+    hero = {"sprite" : []*5,
+            "health" : 10}
+    enemy = {"sprite" : []*5,
+            "health" : 10}
+    attack = ["   "]*3
+    damage = 10
+    return([" " * 40 + enemy["sprite"][0],
+               " " * 40 + enemy["sprite"][1],
+               "   HP:", str(hero["health"]) + " "*15-int(len(str(hero["healthy"])))+attack[0]+" "*13+enemy["sprite"][2],
+               "   "+hero["sprite"][0]+" "*10+attack[1]+" "*13+enemy["sprite"][3],
+               "   "+hero["sprite"][1]+" "*10+attack[2]+" "*13+enemy["sprite"][4],
+               "   "+hero["sprite"][2],
+               "   "+hero["sprite"][3]+" "*6+str(damage)+" "*(23-int(len(str(damage))))+"HP: "+str(enemy["health"]),
+               "   "+hero["sprite"]])
 
 def change(cmd, room, x, y, last):
     # List of barrier blocks
