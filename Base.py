@@ -10,8 +10,8 @@ usr = {"lvl": 1,
        "y": 7,
        "last": " ",
        "room": 0}
-       
-rooms = [Room({"y": usr["y"], "x": usr["x"]},[[18, 7, "door", 1]])]
+
+rooms = [Room({"y": usr["y"], "x": usr["x"]},[[18, 7, "door", 1],[18,0,"door", 1]])]
 rooms[usr["room"]].room[rooms[usr["room"]].spawn["y"]][rooms[usr["room"]].spawn["x"]] = "8"
 
 possibleMoves = ["w", "s", "a", "d"]
@@ -44,13 +44,16 @@ while True:
 
                 # Door Request
                 if door["request"] == "door":
+                    rooms[usr["room"]].room[usr["y"]][usr["x"]] = usr["last"]
                     if int(len(rooms)) <= door["data"]: #{"y": usr["y"], "x": usr["x"]}  
                         rooms.append(Room({"y": door["y"], "x": door["x"]},[[18, 7, "door", 0]]))
                     usr["room"] = door["data"]
                     usr["y"] = rooms[usr["room"]].spawn["y"]; usr["x"] = rooms[usr["room"]].spawn["x"]
                     rooms[usr["room"]].room[usr["y"]][usr["x"]] = "8"
                     
+                # Battle Request
                 if door["request"] == "battle":
+
                     print("fix this")
 
     # Quit Control

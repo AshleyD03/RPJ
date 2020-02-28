@@ -1,8 +1,8 @@
-class Stats:
-    def __init__(self, health, sprites):
-        self.health = health
+class Character:
+    def __init__(self, sprites, attacks, health):
         self.sprites = sprites
-
+        self.attacks = attacks
+        self.health = health
 
 def import_sprites():
     return({
