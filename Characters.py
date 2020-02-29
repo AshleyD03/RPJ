@@ -1,8 +1,24 @@
 class Character:
-    def __init__(self, sprites, attacks, health):
+    def __init__(self, sprites, moves, stats):
         self.sprites = sprites
-        self.attacks = attacks
-        self.health = health
+        # up too four moves
+        self.moves = moves
+        # stats made of health, attack, defence, speed and xp
+        self.stats = stats
+        self.health = self.stats["health"]
+
+    def _damage(self, damage):
+        self.health -= damage
+
+    # If health elow 0 return False
+    def _alive(self):
+        if self.health <= 0:
+            return(False)
+        else:
+            return(True)
+
+def attack_fireBall():
+    print("")
 
 def import_sprites():
     return({
@@ -53,7 +69,7 @@ def import_sprites():
                                 "|' V|V ']",
                                 "|_|| ||_]"]},
             "clear": ["         "]*5},
-        "attack": {
+        "attacks": {
             "fireBall": ["  ,oO",
                          " ,oO ",
                          ",oO  "],

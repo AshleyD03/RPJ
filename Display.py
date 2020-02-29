@@ -1,9 +1,9 @@
 # Display screen with display[8], botText[2] and stats{lvl, lives}
-def screen(display, topText, botText, style):
+def screen(display, lvl , floor, botText, style):
     print("\n" * 20) 
     # Top
     line = "@-"+"=-"*24 + "=@" 
-    print(line + "\n@" + topText + "@\n" + line)
+    print(line + "\n@" + ("  LVL: " + str(lvl) + " "*33 + "HP: " + str(floor) + " " * (6 - len(str(floor)))) + "@\n" + line)
     # Center
     if style == "room": # room Styling and 36 x 8 fit
         for y in range (8):
@@ -12,7 +12,7 @@ def screen(display, topText, botText, style):
                 print((display[y][x]), end="")
             print("@@")
 
-    else: # Battle Styling, just prints each line
+    elif style == "battle": # Battle Styling, just prints each line
         for y in range (8):
             print(display[y])
             
@@ -23,21 +23,15 @@ def screen(display, topText, botText, style):
     print(line)
 
 # Fix Me 
-def battleFormat():
-    hero = {"sprite" : []*5,
-            "health" : 10}
-    enemy = {"sprite" : []*5,
-            "health" : 10}
-    attack = ["   "]*3
-    damage = 10
+def battleFormat(player, enemy, attack, damage):
     return([" " * 40 + enemy["sprite"][0],
-               " " * 40 + enemy["sprite"][1],
-               "   HP:", str(hero["health"]) + " "*15-int(len(str(hero["healthy"])))+attack[0]+" "*13+enemy["sprite"][2],
-               "   "+hero["sprite"][0]+" "*10+attack[1]+" "*13+enemy["sprite"][3],
-               "   "+hero["sprite"][1]+" "*10+attack[2]+" "*13+enemy["sprite"][4],
-               "   "+hero["sprite"][2],
-               "   "+hero["sprite"][3]+" "*6+str(damage)+" "*(23-int(len(str(damage))))+"HP: "+str(enemy["health"]),
-               "   "+hero["sprite"]])
+            " " * 40 + enemy["sprite"][1],
+            "   HP:", str(player["health"]) + " "*15-int(len(str(player["healthy"])))+attack[0]+" "*13+enemy["sprite"][2],
+            "   "+player["sprite"][0]+" "*10+attack[1]+" "*13+enemy["sprite"][3],
+            "   "+player["sprite"][1]+" "*10+attack[2]+" "*13+enemy["sprite"][4],
+            "   "+player["sprite"][2],
+            "   "+player["sprite"][3]+" "*6+str(damage)+" "*(23-int(len(str(damage))))+"HP: "+str(enemy["health"]),
+            "   "+player["sprite"][4]])
 
 def change(cmd, room, x, y, last):
     # List of barrier blocks
