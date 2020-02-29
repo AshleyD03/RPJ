@@ -1,7 +1,7 @@
 import random
 #Generate a room
 class Room:
-    def __init__(self, spawn, walls, doors):
+    def __init__(self, spawn, wall_code, doors):
         self.spawn = spawn
         self.doors = []
         for i in range (len(doors)):
@@ -15,8 +15,10 @@ class Room:
         self.room = self.__generate(walls, doors)
 
     def __generate(self, walls, doors):
-        # Create Basic Square
+        # Create Basic Air Rectangle
         room = [[" "]*36 for _ in range(8)]
+
+        # Apply Wall / Space Changes
         for y in range(8):
             room[y][0] = "/"
             room[y][35] = "/"

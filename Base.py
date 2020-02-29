@@ -1,7 +1,7 @@
 from Display import screen, change
 from Room import Room
 from Characters import import_sprites, Character
-from Combat import battle
+#from Combat import battle
 import msvcrt
 
 spriteDictionary = import_sprites()
