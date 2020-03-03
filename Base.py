@@ -1,7 +1,7 @@
 from Display import screen, change
 from Room import Room
 from Characters import import_sprites, Character
-#from Combat import battle
+from Combat import battle
 import msvcrt
 
 spriteDictionary = import_sprites()
@@ -13,10 +13,10 @@ usr = {"lvl": 1,
        "last": " ",
        "room": 0,
        "floor": 1,
-       "character": Character(spriteDictionary["character"]["hero"], ["","","",""], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "xp": 0})}
+       "character": Character(spriteDictionary["character"]["hero"], ["fireblast","tictoc","woosh"], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "accuracy": 5, "evasiveness": 5, "xp": 0})}
 
 # Create Room List 
-rooms = [Room({"y": usr["y"], "x": usr["x"]},["f235","eeeeee","fea23a","a","1234","f00000"],[{"x": 18, "y": 7, "request": "door", "data": 1},{"x": 18, "y": 0, "request": "door", "data": 1},{"x": 12, "y": 3, "request": "text", "data": [" Bottom"," Top"]},{"x": 21, "y": 5, "request": "battle", "data": Character(spriteDictionary["character"]["enemy2"], {"move1": "","move2": "","move3":"","move4":""}, {"health": 10, "attack": 2, "defence": 2, "speed": 5, "xp": 0})}])]
+rooms = [Room({"y": usr["y"], "x": usr["x"]},["f235","eeeeee","fffffffff","b00b13","1234","f00000"],[{"x": 18, "y": 7, "request": "door", "data": 1},{"x": 18, "y": 0, "request": "door", "data": 1},{"x": 12, "y": 3, "request": "text", "data": [" Bottom"," Top"]},{"x": 18, "y": 6, "request": "battle", "data": Character(spriteDictionary["character"]["enemy2"], ["fireblast"], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "accuracy": 5,"evasiveness": 5, "xp": 0})}])]
 # Spawn Player
 rooms[usr["room"]].room[rooms[usr["room"]].spawn["y"]][rooms[usr["room"]].spawn["x"]] = "8"
 
@@ -34,7 +34,7 @@ while True:
     # WSAD Controls
     if entry in possibleMoves:
         # Reset text
-        mapText = {"bot":["line 1", "line 2"], "top": ("  LVL: " + str(usr["lvl"]) + " "*33 + "HP: " + str(usr["character"].health) + " " * (5 - len(str(usr["character"].health))))}
+        botText = ["line 1", "line 2"]
 
         changes = change(entry, rooms[usr["room"]].room, usr["x"], usr["y"], usr["last"])
         rooms[usr["room"]].room = changes[0]; usr["x"] = changes[1]; usr["y"] = changes[2]; usr["last"] = changes[3]
@@ -63,8 +63,7 @@ while True:
                     
                 # Battle Request
                 elif door["request"] == "battle":
-                    battle(usr["character"], door["data"], spriteDictionary["attacks"])
-
+                    battle(usr, door["data"], spriteDictionary["attacks"])
                 # Text Request
                 elif door["request"] == "text":
                     botText = [door["data"][0],door["data"][1]]

@@ -1,24 +1,29 @@
+import random
+import math
+
 class Character:
     def __init__(self, sprites, moves, stats):
         self.sprites = sprites
-        # up too four moves
+
         self.moves = moves
+        if len(self.moves) >= 4:
+            for i in range(4-len(self.moves)):
+                self.moves.append("none")
+
         # stats made of health, attack, defence, speed and xp
         self.stats = stats
         self.health = self.stats["health"]
 
+    # Take damage Function
     def _damage(self, damage):
         self.health -= damage
 
-    # If health elow 0 return False
+    # Check if dead function
     def _alive(self):
         if self.health <= 0:
             return(False)
         else:
             return(True)
-
-def attack_fireBall():
-    print("")
 
 def import_sprites():
     return({
