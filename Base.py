@@ -64,6 +64,7 @@ while True:
                 # Battle Request
                 elif door["request"] == "battle":
                     battle(usr, door["data"], spriteDictionary["attacks"])
+                    
                 # Text Request
                 elif door["request"] == "text":
                     botText = [door["data"][0],door["data"][1]]

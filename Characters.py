@@ -75,9 +75,12 @@ def import_sprites():
                                 "|_|| ||_]"]},
             "clear": ["         "]*5},
         "attacks": {
-            "fireBall": ["  ,oO",
+            "fireBlast": ["  ,oO",
                          " ,oO ",
                          ",oO  "],
+            "spark":["  /  ",
+                     " zzz ",
+                     "   / "],
             "miss": ["?    ",
                      "  ?  ",
                      " ?   "],
