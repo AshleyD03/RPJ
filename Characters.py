@@ -14,9 +14,13 @@ class Character:
         self.stats = stats
         self.health = self.stats["health"]
 
-    # Take damage Function
+    # Take damage Function / Heal
     def _damage(self, damage):
         self.health -= damage
+
+    # Reset health
+    def _resetHealth(self):
+        self.health = self.stats["health"]
 
     # Check if dead function
     def _alive(self):

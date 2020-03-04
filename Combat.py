@@ -1,15 +1,12 @@
 from Display import screen, battleFormat
 import msvcrt
-
 import random
 import math
 
 # Moves to Use
-def move_damage(usr, enemy, move):
-    print(usr)
-    print(enemy)
-    if random.randint(1,100) > move["misschance"] - usr["character"].stats["accuracy"] * 3 + enemy.stats["evasiveness"] * 3:
-        dmg = math.ceil((random.randint(move["min"],move["max"]) * usr["attack"] * 0.5) / (usr["defence"] * 0.5))
+def move_damage(usr_stats, target_stats, move):
+    if random.randint(1,100) > move["misschance"] - usr_stats["accuracy"] * 3 + target_stats["evasiveness"] * 3:
+        dmg = math.ceil((random.randint(move["min"],move["max"]) * usr_stats["attack"] * 0.5) / (target_stats["defence"] * 0.5))
     else:
         dmg = "miss"
     return(dmg)
@@ -17,7 +14,7 @@ def move_damage(usr, enemy, move):
 def move_finder(movename, attackSprites):
     # Dictionary with move_name : move_function
     move_set = {
-        "fireblast": {"name": "fireBlast", "misschance" : 10, "max": 4, "min": 2, "effect" : "none"},
+        "fireblast": {"name": "fireBlast", "misschance" : 10, "max": 4, "min": 2, "effect" : "damage"},
         "spark": {"name": "spark","misschance": 1, "max": 2, "min": 1, "effect": "priority"}
     }
     # Take function from dictionary, if not there return miss function
@@ -36,15 +33,13 @@ def battle(usr, enemy, attackSprites):
     for i in range (len(moves)):
         instructions[i%2] += " "+str(i+1)+": "+moves[i]+" "*11
 
-    # Take normal sprite
-    current_hero = usr["character"].sprites["normal"]; current_enemy = enemy.sprites["normal"]
-
     # Begin Fight Loop
     while True:
+        # Take normal sprite
+        current_hero = usr["character"].sprites["normal"]; current_enemy = enemy.sprites["normal"]; attackSprite = attackSprites["clear"]
         damage = " "
-        attackSprite = attackSprites["clear"]
         
-        display = battleFormat({"sprite": current_hero, "health": str(usr["character"].health)}, {"sprite": current_enemy, "health": str(enemy.stats["health"])}, attackSprite, damage)
+        display = battleFormat({"sprite": current_hero, "health": str(usr["character"].health)}, {"sprite": current_enemy, "health": str(enemy.health)}, attackSprite, damage)
         screen(display, usr["lvl"], usr["floor"], instructions, "battle")
         entry = str(msvcrt.getch())[2]
         
@@ -54,18 +49,22 @@ def battle(usr, enemy, attackSprites):
             usr_move = move_finder(moves[int(entry)-1], attackSprites)
             enemy_move = move_finder(random.choice(enemy.moves), attackSprites)
             
-            bot_text = [""," "*20+"Press to Continue"]
+            bot_text = [""," "*15+"Press to Continue"]
 
             # if usr is faster attack first
             if usr["character"].stats["speed"] >= enemy.stats["speed"] and enemy_move["effect"] != "priority" or usr_move["effect"] == "priority":
+                # if attack is a miss
                 if usr_move["effect"] == "miss":
-                    bot_text[0] = " "*20+"You missed"
-
-                damage = move_damage(usr, enemy, usr_move)
-                enemy._damage(damage)
-                current_hero == usr["character"].sprites["attack"]; current_enemy = enemy.sprites["enemy"]; attackSprite = attackSprites[usr_move["name"]]
-
-                display = battleFormat({"sprite": current_hero, "health": str(usr["character"].health)}, {"sprite": current_enemy, "health": str(enemy.stats["health"])}, attackSprite, damage)
+                    bot_text[0] = " "*18+"You missed"
+                    current_hero = usr["character"].sprites["hurt"]; current_enemy = enemy.sprites["hurt"];attackSprite = attackSprites["miss"]
+                # if attack chosen is damage
+                elif usr_move["effect"] == "damage":
+                    damage = move_damage(usr["character"].stats, enemy.stats, usr_move)
+                    if str(damage) != "miss":
+                        enemy._damage(int(damage))
+                        current_hero = usr["character"].sprites["attack"]; current_enemy = enemy.sprites["hurt"]; attackSprite = attackSprites[usr_move["name"]]
+                # if attack is 
+                display = battleFormat({"sprite": current_hero, "health": str(usr["character"].health)}, {"sprite": current_enemy, "health": str(enemy.health)}, attackSprite, damage)
                 screen(display, usr["lvl"], usr["floor"], bot_text, "battle")
 
                 msvcrt.getch()
@@ -73,10 +72,6 @@ def battle(usr, enemy, attackSprites):
             # Enemy takes turn
             if enemy_move["effect"] == "miss":
                 bot_text[0] = " "*20+"They Missed"
-
-            
-            name = "They"
-
 
             # Then if usr didnt go first attack
             if usr["character"].stats["speed"] < enemy.stats["speed"] and usr_move["effect"] != "priority" or enemy_move["effect"] == "priority":
