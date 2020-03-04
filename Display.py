@@ -24,9 +24,6 @@ def screen(display, lvl , floor, botText, style):
 
 # Fix Me 
 def battleFormat(player, enemy, attack, damage):
-    
-    print(enemy["sprite"])
-    print(attack)
     return([" " * 40 + enemy["sprite"][0], " " * 40 + enemy["sprite"][1],
             "   HP: "+ player["health"] + " "*(15-int(len(player["health"])))+attack[0]+" "*13+enemy["sprite"][2],
             "   "+player["sprite"][0]+" "*10+attack[1]+" "*13+enemy["sprite"][3],
