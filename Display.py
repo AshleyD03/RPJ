@@ -1,9 +1,9 @@
 # Display screen with display[8], botText[2] and stats{lvl, lives}
-def screen(display, lvl , floor, botText, style):
+def screen(display, lvl , health, botText, style):
     print("\n" * 20) 
     # Top
     line = "@-"+"=-"*24 + "=@" 
-    print(line + "\n@" + ("  LVL: " + str(lvl) + " "*33 + "HP: " + str(floor) + " " * (6 - len(str(floor)))) + "@\n" + line)
+    print(line + "\n@" + ("  LVL: " + str(lvl) + " "*33 + "HP: " + str(health) + " " * (6 - len(str(health)))) + "@\n" + line)
     # Center
     if style == "room": # room Styling and 36 x 8 fit
         for y in range (8):

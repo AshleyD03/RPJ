@@ -63,7 +63,7 @@ while True:
                     
                 # Battle Request
                 elif door["request"] == "battle":
-                    battle(usr, door["data"], spriteDictionary["attacks"])
+                    battle(usr["character"], door["data"], spriteDictionary["attacks"], usr["lvl"])
                     
                 # Text Request
                 elif door["request"] == "text":
