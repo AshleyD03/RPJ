@@ -31,7 +31,7 @@ def turn(move, usr, target, attack_Sprites):
 
     # if attack chosen is damage
     elif move["effect"] == "none" or move["effect"] == "priority":
-        text = " " * 10 + move["name"],"hit for",str(damage)
+        text = (" " * 10 + move["name"] + " hit for " + str(damage))
         target._damage(int(damage))
         usr_sprite = usr.sprites["attack"]; target_sprite = target.sprites["hurt"]; attack_sprite = attack_Sprites[move["name"]]
     
@@ -73,7 +73,7 @@ def battle(usr, enemy, attack_Sprites, usr_lvl):
             usr_move = move_finder(moves[int(entry)-1], attack_Sprites)
             enemy_move = move_finder(random.choice(enemy.moves), attack_Sprites)
             
-            bot_text = [""," "*15+"Press to Continue"]
+            bot_text = ["","tits"]
 
             # if usr is faster attack first
             if usr.stats["speed"] >= enemy.stats["speed"] and enemy_move["effect"] != "priority" or usr_move["effect"] == "priority":
@@ -87,7 +87,20 @@ def battle(usr, enemy, attack_Sprites, usr_lvl):
                 msvcrt.getch()
 
             results = turn(enemy_move, enemy, usr, attack_Sprites)
-            enemy = results["usr"]; usr = results["target"]; 
+            enemy = results["usr"]; usr = results["target"]
+            display = battleFormat({"sprite": results["target_sprite"], "health": str(usr.health)}, {"sprite": results["usr_sprite"], "health": str(enemy.health)}, attackSprite, results["damage"])
+            screen(display, usr_lvl, usr.health, bot_text, "battle")
+
+            msvcrt.getch()
+
+            if usr.stats["speed"] < enemy.stats["speed"] and usr_move["effect"] != "priority" or enemy_move["effect"] == "priority":
+                results = turn(usr_move, usr, enemy, attack_Sprites)
+                usr = results["usr"]; enemy = results["target"]; bot_text[0] = results["bot_text"]
+
+                display = battleFormat({"sprite": results["usr_sprite"], "health": str(usr.health)}, {"sprite": results["target_sprite"], "health": str(enemy.health)}, attackSprite, results["damage"])
+                screen(display, usr_lvl, usr.health, bot_text, "battle")
+
+                msvcrt.getch()
 
         if str(entry) == "q":
             break

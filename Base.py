@@ -16,7 +16,7 @@ usr = {"lvl": 1,
        "character": Character(spriteDictionary["character"]["hero"], ["fireblast","tictoc","woosh"], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "accuracy": 5, "evasiveness": 5, "xp": 0})}
 
 # Create Room List 
-rooms = [Room({"y": usr["y"], "x": usr["x"]},["f235","efffee","ff0ffffff","b00b135","1234","f00000"],[{"x": 18, "y": 7, "request": "door", "data": 1},{"x": 18, "y": 0, "request": "door", "data": 1},{"x": 12, "y": 3, "request": "text", "data": [" Bottom"," Top"]},{"x": 18, "y": 6, "request": "battle", "data": Character(spriteDictionary["character"]["enemy2"], ["fireblast"], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "accuracy": 5,"evasiveness": 5, "xp": 0})}])]
+rooms = [Room({"y": usr["y"], "x": usr["x"]},["f235","efffee","ff0ffffff","b00b135","1234","f00000"],[{"x": 18, "y": 7, "request": "door", "data": 1},{"x": 18, "y": 0, "request": "door", "data": 1},{"x": 12, "y": 3, "request": "text", "data": [" Bottom"," Top"]},{"x": 17, "y": 6, "request": "battle", "data": Character(spriteDictionary["character"]["enemy2"], ["fireblast"], {"health": 10, "attack": 2, "defence": 2, "speed": 5, "accuracy": 5,"evasiveness": 5, "xp": 0})}])]
 # Spawn Player
 rooms[usr["room"]].room[rooms[usr["room"]].spawn["y"]][rooms[usr["room"]].spawn["x"]] = "8"
 
