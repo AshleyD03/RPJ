@@ -37,6 +37,7 @@ def battleFormat(player, enemy, attack, damage):
 def change(cmd, room, x, y, last):
     # List of barrier blocks
     barrier = ["/", "[", "]"]
+
     # Check possible movement
     if cmd == "w":
         if y - 1 < 0 or room[y-1][x] in barrier:
@@ -51,7 +52,7 @@ def change(cmd, room, x, y, last):
             return(room, x, y, last)
         room[y][x] = last; y += 1
     if cmd == "d": 
-        if x + 1 > 35 or room[y][x+1] in barrier:
+        if x + 1 > 34 or room[y][x+1] in barrier:
             return(room, x, y, last)
         room[y][x] = last; x += 1
     last = room[y][x]; room[y][x] = "8"
