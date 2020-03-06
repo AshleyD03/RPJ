@@ -1,5 +1,5 @@
 import random
-import math
+import math 
 
 class Character:
     def __init__(self, sprites, moves, stats):

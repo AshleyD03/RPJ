@@ -1,10 +1,13 @@
 import msvcrt
 from colored import fg, bg, attr
+from Classes import Enemy
 
-lines= [[" "] * 35 for _ in range(8)]
+lines = [[" "] * 35 for _ in range(8)]
 lines[0] = ["/"] * 35; lines[7] = ["/"] * 35
 for i in range(1,8):
     lines[i][0] = "/"; lines[i][34] = "/"
+
+settings = [["none"]*35 for _ in range(38)]
 
 pos = {"x": 2,
      "y": 2}
@@ -23,6 +26,7 @@ def revert(last):
     if last == "":
         last = " "
     lines[pos["y"]][pos["x"]] = last + col_clear
+    settings[pos["y"]][pos["x"]] = "none"
 
 def move(cmd, last):
     if cmd == "w":
@@ -58,7 +62,6 @@ def output_grid():
         print("X")
     print("X"*37)
 
-#class Enemy():
 change_current(current, col_current)
 help_line = "Helpy: Hi there Ashley o/"
 while True:
@@ -76,6 +79,7 @@ while True:
         # add Enemy
         if entry == "n": 
             change_current("@", col_current); last = "@"
+            settings[pos["y"]][pos["x"]] = Enemy()
             help_line = "Helpy: Enemy spawned"
 
         # add Spawn 
@@ -102,9 +106,10 @@ while True:
                 wall_touch = False
                 for i in range (-1,2):
                     wall_scan = lines[pos["y"]][pos["x"] + i]
-                    print("'"+wall_scan+"'")
-                    if wall_scan:
+                    print(wall_scan)
+                    if "[" in wall_scan  or "[" in wall_scan :
                         wall_touch = True
+            
                 if wall_touch == True:
                     help_line = "Helpy: Horizontal door touching door error"
                     
