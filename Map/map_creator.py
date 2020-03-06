@@ -95,26 +95,41 @@ while True:
 
     # add Door
     elif entry == "v":
-        # Check if door allready there 
-        
-        if:
-            help_line = "Helpy: Sorry door already there"
-           
         # horizontal door
-        elif pos["y"] == 0 or pos["y"] == 7:
+        if pos["y"] == 0 or pos["y"] == 7:
+            # Check wall distance
             if pos["x"] > 1 and pos["x"] < 33: 
-                lines[pos["y"]][pos["x"] - 1] = "["; lines[pos["y"]][pos["x"] + 1] = "]"
-                change_current(" ", col_current); last = " "
-                help_line = "Helpy: Horizontal door added"
+                wall_touch = False
+                for i in range (-1,2):
+                    wall_scan = lines[pos["y"]][pos["x"] + i]
+                    print("'"+wall_scan+"'")
+                    if wall_scan:
+                        wall_touch = True
+                if wall_touch == True:
+                    help_line = "Helpy: Horizontal door touching door error"
+                    
+                else:
+                    lines[pos["y"]][pos["x"] - 1] = "["; lines[pos["y"]][pos["x"] + 1] = "]"
+                    change_current(" ", col_current); last = " "
+                    help_line = "Helpy: Horizontal door added"
             else:
                 help_line = "Helpy: Horizontal door too close to sides"
 
         # vertical door
         elif pos["x"] == 0 or pos["x"] == 34:
+            # Chck wall distance
             if pos["y"] > 1 and pos["y"] < 6:
-                lines[pos["y"] - 1][pos["x"]] = "-"; lines[pos["y"] +1][pos["x"]] = "-"
-                change_current(" ", col_current); last = " "
-                help_line = "Helpy: Vertical door added"
+                wall_touch = False
+                for i in range (-1,2):
+                    wall_scan = lines[pos["y"] + i][pos["x"]]
+                    if " " in wall_scan or "[" in wall_scan or "]" in wall_scan:
+                        wall_touch = True
+                if wall_touch == True:
+                    help_line = "Helpy: Vertical door touching door error"
+                else:
+                    lines[pos["y"] - 1][pos["x"]] = "-"; lines[pos["y"] +1][pos["x"]] = "-"
+                    change_current(" ", col_current); last = " "
+                    help_line = "Helpy: Vertical door added"
             else:
                 help_line = "Helpy: Vertical door to close to sides"
 
