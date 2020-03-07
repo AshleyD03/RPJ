@@ -25,3 +25,4 @@ class Text():
 class Door():
     def __init__(self):
         self.room_number = 0
+
