@@ -3,6 +3,8 @@ from colored import fg, bg, attr
 from Classes import Enemy, Text, Door
 from Functions import output_grid
 
+rooms = []
+
 lines = [[" "] * 35 for _ in range(8)]
 lines[0] = ["/"] * 35; lines[7] = ["/"] * 35
 for i in range(1,8):
@@ -14,7 +16,16 @@ pos = {"x": 2,
 current = " "
 last = " "
 
-controlls = {"wall" : "1", "enemy" : "2", "text" : "3", "spawn" : "4", "door" : "5", "decoration" : "6", "delete" : "7", "settings" : "8"}
+controlls = {"wall" : "1", 
+             "enemy" : "2", 
+             "text" : "3", 
+             "spawn" : "4", 
+             "door" : "5", 
+             "decoration" : "6", 
+             "delete" : "7", 
+             "values" : "8",
+             "other rooms" : "9",
+             "floor code" : "0"}
 # Colors
 col_clear = attr('reset')
 col_current = bg(196)
@@ -53,7 +64,7 @@ def remove_All(symbol):
                 lines[y][x] = " "; break
 
 change_current(current, col_current)
-help_line = "Helpy: Hi there Ashley o/"
+help_line = "\n Helpy: Hi there Ashley o/"
 while True:
     print(background_settings[7])
     output_grid(lines); print("(B) - Wall    (N) - Enemy  (M) - Spawn\n(C) - Edit    (V) - Door   (,) - Delete\n"+help_line)
@@ -63,7 +74,7 @@ while True:
     if entry in ["w","a","s","d"]:
         last = move(entry, last)
         change_current(last, col_current)
-        help_line = "Helpy: Move "+entry
+        help_line = "\n Helpy: Moved ya in direction ("+entry+")"
 
     # Q command : quit command
     elif entry == "q":
@@ -71,29 +82,26 @@ while True:
 
     # Adding commands : 
     else: 
-        # Check add command not used on door
-        #if 
+        
+        if background_settings[pos["y"]][pos["x"]] != "none":
+            help_line = "\n Helpy: Sorry, but an obejcts already there"
 
         # add Enemy
-        if entry == "n": 
+        elif entry == "n": 
             change_current("@", col_current); last = "@"
             background_settings[pos["y"]][pos["x"]] = Enemy()
-            help_line = "Helpy: Enemy spawned"
+            help_line = "\n Helpy: I'll spawn you an Enemy :D "
 
         # add Spawn 
         elif entry == "m": 
             remove_All("S")
             change_current("S", col_current); last = "S"
-            help_line = "Helpy: Spawn Moved"
+            help_line = "\n Helpy: I've moved your spawn :>"
 
         # add Wall
         elif entry == "b":
             change_current("/", col_current);  last = "/"
-            help_line = "Helpy: Added Wall"
-
-        # Inner rim used in outer check
-        elif entry in ["n","m","b"]:
-            help_line = "Helpy: Can't use these on outer rim"
+            help_line = "\n Helpy: I've added a wall :D "
 
         # add Door
         elif entry == "v":
@@ -109,14 +117,14 @@ while True:
                             wall_touch = True  
 
                     if wall_touch == True:
-                        help_line = "Helpy: Horizontal door touching door error"
+                        help_line = "\n Helpy: I Can't do that, it's touching a door :I"
                         
                     else:
                         lines[pos["y"]][pos["x"] - 1] = "["; lines[pos["y"]][pos["x"] + 1] = "]"; background_settings[pos["y"]][pos["x"] - 1] = "door_side"; background_settings[pos["y"]][pos["x"]] = Door(); background_settings[pos["y"]][pos["x"] + 1] = "door_side"
                         change_current(" ", col_current); last = " "
-                        help_line = "Helpy: Horizontal door added"
+                        help_line = "\n Helpy: I'll add a horizontal door ;D"
                 else:
-                    help_line = "Helpy: Horizontal door too close to sides"
+                    help_line = "\n Helpy: Sorry, but that door's too close to the sides :3"
 
             # vertical door
             elif pos["x"] == 0 or pos["x"] == 34:
@@ -130,14 +138,14 @@ while True:
                             wall_touch = True
 
                     if wall_touch == True:
-                        help_line = "Helpy: Vertical door touching door error"
+                        help_line = "\n Helpy: I Can't do that, it's touching a door :I"
                     else:
                         lines[pos["y"] - 1][pos["x"]] = "-"; lines[pos["y"] + 1][pos["x"]] = "-";background_settings[pos["y"] - 1][pos["x"]] = "door_side"; background_settings[pos["y"]][pos["x"]] = Door(); background_settings[pos["y"] + 1][pos["x"]] = "door_side"
                         change_current(" ", col_current); last = " "
 
-                        help_line = "Helpy: Vertical door added"
+                        help_line = "\n Helpy: I'll add a vertical door ;D"
                 else:
-                    help_line = "Helpy: Vertical door to close to sides"
+                    help_line = "\n Helpy: Sorry, but that door's too close to the sides :3"
 
             else:
-                help_line = "Helpy: Sorry, doors can only go on sides"
+                help_line = "\n Helpy: Sorry, but doors go on the side line :I"
