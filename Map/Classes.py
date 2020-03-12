@@ -20,9 +20,13 @@ class Enemy():
 
 class Text():
     def __init__(self):
-        self.text = [" Line 1"," Line 2"]
+        self.text = [" Line 1 - Change Me"," Line 2 - Me Too"]
     
 class Door():
     def __init__(self):
         self.room_number = 0
+
+class Spawn():
+    def __init__(self, x, y):
+        self.cords = {"x" : x, "y" : y}
 

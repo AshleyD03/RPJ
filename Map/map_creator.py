@@ -15,7 +15,6 @@ pos = {"x": 2,
      "y": 2}
 current = " "
 last = " "
-
 controlls = {"wall" : "1", 
              "enemy" : "2", 
              "text" : "3", 
@@ -24,8 +23,7 @@ controlls = {"wall" : "1",
              "decoration" : "6", 
              "delete" : "7", 
              "values" : "8",
-             "other rooms" : "9",
-             "floor code" : "0"}
+             "views rooms" : "9"}
 # Colors
 col_clear = attr('reset')
 col_current = bg(196)
@@ -64,17 +62,24 @@ def remove_All(symbol):
                 lines[y][x] = " "; break
 
 change_current(current, col_current)
-help_line = "\n Helpy: Hi there Ashley o/"
+help_line = "Helpy: Hi there Ashley o/"
 while True:
     print(background_settings[7])
-    output_grid(lines); print("(B) - Wall    (N) - Enemy  (M) - Spawn\n(C) - Edit    (V) - Door   (,) - Delete\n"+help_line)
-    entry = str(msvcrt.getch())[2]; 
+    output_grid(lines)
+    i = 0
+    for key, value in controlls.items():
+        print("  (" + value + ")", key +" " * (11 - len(key)), end="")
+        i += 1
+        if i % 3 == 0: 
+            print("")
+    print("X" * 55 + "\n O.O - " + help_line + "\n" + "X" * 55)
+    entry = str(msvcrt.getch())[2]; print(entry)
 
     # W/A/S/D command : move commands
     if entry in ["w","a","s","d"]:
         last = move(entry, last)
         change_current(last, col_current)
-        help_line = "\n Helpy: Moved ya in direction ("+entry+")"
+        help_line = "Helpy: Moved ya in direction ("+entry+")"
 
     # Q command : quit command
     elif entry == "q":
@@ -82,26 +87,33 @@ while True:
 
     # Adding commands : 
     else: 
-        
+        # Check there is no object allready there
         if background_settings[pos["y"]][pos["x"]] != "none":
-            help_line = "\n Helpy: Sorry, but an obejcts already there"
+            help_line = "Helpy: Sorry, but an obejcts already there"
+
+         # add Wall
+        elif entry == controlls["wall"]:
+            change_current("/", col_current);  last = "/"
+            help_line = "Helpy: I've added a Wall Block :D "
 
         # add Enemy
-        elif entry == "n": 
+        elif entry == controlls["enemy"]: 
             change_current("@", col_current); last = "@"
             background_settings[pos["y"]][pos["x"]] = Enemy()
-            help_line = "\n Helpy: I'll spawn you an Enemy :D "
+            help_line = "Helpy: I'll spawn you an Enemy Node :D "
+
+        # add Text
+        elif entry == controlls["text"]: 
+            change_current("?", col_current); last = "?"
+            background_settings[pos["y"]][pos["x"]] = Text()
+            help_line = "Helpy: I'm spawning in a Text Node "
 
         # add Spawn 
         elif entry == "m": 
             remove_All("S")
             change_current("S", col_current); last = "S"
-            help_line = "\n Helpy: I've moved your spawn :>"
-
-        # add Wall
-        elif entry == "b":
-            change_current("/", col_current);  last = "/"
-            help_line = "\n Helpy: I've added a wall :D "
+            background_settings[pos["y"]][pos["x"]] = Spawn()
+            help_line = "Helpy: I've moved your Spawn Node :>"
 
         # add Door
         elif entry == "v":
@@ -117,14 +129,14 @@ while True:
                             wall_touch = True  
 
                     if wall_touch == True:
-                        help_line = "\n Helpy: I Can't do that, it's touching a door :I"
+                        help_line = "Helpy: I Can't do that, it's touching a door :I"
                         
                     else:
                         lines[pos["y"]][pos["x"] - 1] = "["; lines[pos["y"]][pos["x"] + 1] = "]"; background_settings[pos["y"]][pos["x"] - 1] = "door_side"; background_settings[pos["y"]][pos["x"]] = Door(); background_settings[pos["y"]][pos["x"] + 1] = "door_side"
                         change_current(" ", col_current); last = " "
-                        help_line = "\n Helpy: I'll add a horizontal door ;D"
+                        help_line = "Helpy: I'll add a horizontal door ;D"
                 else:
-                    help_line = "\n Helpy: Sorry, but that door's too close to the sides :3"
+                    help_line = "Helpy: Sorry, but that door's too close to the sides :3"
 
             # vertical door
             elif pos["x"] == 0 or pos["x"] == 34:
@@ -138,14 +150,14 @@ while True:
                             wall_touch = True
 
                     if wall_touch == True:
-                        help_line = "\n Helpy: I Can't do that, it's touching a door :I"
+                        help_line = "Helpy: I Can't do that, it's touching a door :I"
                     else:
                         lines[pos["y"] - 1][pos["x"]] = "-"; lines[pos["y"] + 1][pos["x"]] = "-";background_settings[pos["y"] - 1][pos["x"]] = "door_side"; background_settings[pos["y"]][pos["x"]] = Door(); background_settings[pos["y"] + 1][pos["x"]] = "door_side"
                         change_current(" ", col_current); last = " "
 
-                        help_line = "\n Helpy: I'll add a vertical door ;D"
+                        help_line = "Helpy: I'll add a vertical door ;D"
                 else:
-                    help_line = "\n Helpy: Sorry, but that door's too close to the sides :3"
+                    help_line = "Helpy: Sorry, but that door's too close to the sides :3"
 
             else:
-                help_line = "\n Helpy: Sorry, but doors go on the side line :I"
+                help_line = "Helpy: Sorry, but doors go on the side line :I"
