@@ -1,6 +1,6 @@
 import msvcrt
 from colored import fg, bg, attr
-from Classes import Enemy, Text, Door
+from Classes import Enemy, Text, Door, Spawn, Decoration
 from Functions import output_grid
 
 rooms = []
@@ -35,6 +35,7 @@ def revert(last):
     if last == "":
         last = " "
     lines[pos["y"]][pos["x"]] = last + col_clear
+    background_settings[pos["y"]][pos["x"]] = "none"
 
 def move(cmd, last):
     if cmd == "w":
@@ -73,7 +74,7 @@ while True:
         if i % 3 == 0: 
             print("")
     print("X" * 55 + "\n O.O - " + help_line + "\n" + "X" * 55)
-    entry = str(msvcrt.getch())[2]; print(entry)
+    entry = str(msvcrt.getch())[2]
 
     # W/A/S/D command : move commands
     if entry in ["w","a","s","d"]:
@@ -109,14 +110,14 @@ while True:
             help_line = "Helpy: I'm spawning in a Text Node "
 
         # add Spawn 
-        elif entry == "m": 
+        elif entry == controlls["spawn"]: 
             remove_All("S")
             change_current("S", col_current); last = "S"
             background_settings[pos["y"]][pos["x"]] = Spawn()
             help_line = "Helpy: I've moved your Spawn Node :>"
 
         # add Door
-        elif entry == "v":
+        elif entry == controlls["door"]:
             # horizontal door
             if pos["y"] == 0 or pos["y"] == 7:
                 # Check wall distance
@@ -161,3 +162,12 @@ while True:
 
             else:
                 help_line = "Helpy: Sorry, but doors go on the side line :I"
+
+        elif entry == controlls["decoration"]:
+            decoration = ""
+            while decoration == "":
+                decoration = str(input(" Decoration : "))[0]
+                if decoration in ["?", "@", "/", ""]
+            change_current("?", col_current); last = decoration
+            background_settings[pos["y"]][pos["x"]] = Decoration(decoration)
+            help_line = "Helpy: Decorating the place with : " + decoration

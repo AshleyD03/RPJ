@@ -1,5 +1,6 @@
 class Enemy():
     def __init__(self):
+        self.id = "enemy"
         self.spritename = "enemy2"
         self.moves = ["fireblast"]
         self.health = 5
@@ -20,13 +21,19 @@ class Enemy():
 
 class Text():
     def __init__(self):
+        self.id = "text"
         self.text = [" Line 1 - Change Me"," Line 2 - Me Too"]
     
 class Door():
     def __init__(self):
+        self.id = "door"
         self.room_number = 0
 
 class Spawn():
-    def __init__(self, x, y):
-        self.cords = {"x" : x, "y" : y}
+    def __init__(self):
+        self.id = "spawn"
 
+class Decoration(): 
+    def __init__(self, decor): 
+        self.id = "decoration"
+        self.decoration = decor
